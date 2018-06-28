@@ -9,7 +9,8 @@ full_MI<-function(N,n.item,lambda,nu,theta){
   #for the loading 
   loading.d[1: n.item, 1] <- paste0("load", 1: n.item)
   LY.d <- bind(loading.d, lambda)
-  ##correlation between factors (if measure is multi-dimentional)
+  ##correlation between factors (if measure is multi-dimentional, the matrix for lantecor should be more than 1)##
+  ### Only single factor model was used#######
   latentcor.d <- matrix(NA, 1, 1)
   diag(latentcor.d) <- 1
   RPS.d <- binds(latentcor.d)
@@ -21,10 +22,12 @@ full_MI<-function(N,n.item,lambda,nu,theta){
   VPS1.d <- bind(c(1))
   #factor variance for g2
   VPS2.d <- bind(c(1.1))
-  ##for intercepts 
+  ##for intercepts values
   TY.d <- bind(paste0("int", 1:n.item), nu)
+  ####create factor mean for two groups#########
   AL1.d <- bind(c(0))
   AL2.d <- bind( c(-0.5))
+  ####generate the data#####
   strong <- model(LY = LY.d, RPS = RPS.d, VPS=list(VPS1.d, VPS2.d), RTE = RTE.d, VTE=VTE.d, TY=TY.d, 
                   AL=list(AL1.d, AL2.d), ngroups=2, modelType = "CFA")
   dat<-generate(strong,n=N)
