@@ -1,0 +1,31 @@
+######Author Paprika J############
+######June 28th 2018###########################
+#####Adopted from https://github.com/simsem/simsem/wiki/Example-6:-Multiple-Groups#################
+#################Function for generating 2 groups CFA with strong MI###############
+###########################################################################
+#################One factor model#########
+full_MI<-function(N,n.item,lambda,nu,theta){
+ loading.d <- matrix(0, n.item, 1)
+  #for the loading 
+  loading.d[1: n.item, 1] <- paste0("load", 1: n.item)
+  LY.d <- bind(loading.d, lambda)
+  ##correlation between factors (if measure is multi-dimentional)
+  latentcor.d <- matrix(NA, 1, 1)
+  diag(latentcor.d) <- 1
+  RPS.d <- binds(latentcor.d)
+  ##error correlation 
+  RTE.d <- binds(diag(n.item))
+  ##error variance 
+  VTE.d <- bind(rep(NA, n.item), theta)
+  #factor variance for g1
+  VPS1.d <- bind(c(1))
+  #factor variance for g2
+  VPS2.d <- bind(c(1.1))
+  ##for intercepts 
+  TY.d <- bind(paste0("int", 1:n.item), nu)
+  AL1.d <- bind(c(0))
+  AL2.d <- bind( c(-0.5))
+  strong <- model(LY = LY.d, RPS = RPS.d, VPS=list(VPS1.d, VPS2.d), RTE = RTE.d, VTE=VTE.d, TY=TY.d, 
+                  AL=list(AL1.d, AL2.d), ngroups=2, modelType = "CFA")
+  dat<-generate(strong,n=N)
+  dat}
